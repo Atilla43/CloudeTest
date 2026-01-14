@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Snake - Liquid Glass Edition</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <div class="container">
+        <!-- Header with MetaMask connection -->
+        <header class="glass-panel header">
+            <div class="logo">
+                <h1>🐍 Crypto Snake</h1>
+            </div>
+            <div class="wallet-section">
+                <button id="connectWallet" class="glass-button">
+                    <span id="walletText">Connect MetaMask</span>
+                </button>
+                <div id="walletAddress" class="wallet-address hidden"></div>
+            </div>
+        </header>
+
+        <!-- Game Info Panel -->
+        <div class="info-panel glass-panel">
+            <div class="stat-item">
+                <span class="stat-label">Score</span>
+                <span id="currentScore" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">High Score</span>
+                <span id="highScore" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Length</span>
+                <span id="snakeLength" class="stat-value">3</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Level</span>
+                <span id="gameLevel" class="stat-value">1</span>
+            </div>
+        </div>
+
+        <!-- Game Canvas -->
+        <div class="game-container glass-panel">
+            <canvas id="gameCanvas"></canvas>
+            <div id="gameOverlay" class="game-overlay">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle">Welcome to Crypto Snake!</h2>
+                    <p id="overlayMessage">Press SPACE or tap to start</p>
+                    <div class="controls-info">
+                        <p>🎮 Controls: Arrow Keys or WASD</p>
+                        <p>📱 Mobile: Swipe to move</p>
+                        <p>⏸️ Pause: P or ESC</p>
+                    </div>
+                    <button id="startButton" class="glass-button primary">Start Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Panel -->
+        <div class="leaderboard glass-panel">
+            <h3>🏆 Your Records</h3>
+            <div id="recordsList" class="records-list">
+                <p class="no-records">No records yet. Play your first game!</p>
+            </div>
+        </div>
+
+        <!-- Mobile Controls -->
+        <div class="mobile-controls">
+            <div class="control-row">
+                <button class="control-btn" data-direction="up">↑</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" data-direction="left">←</button>
+                <button class="control-btn" data-direction="down">↓</button>
+                <button class="control-btn" data-direction="right">→</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="glass-panel footer">
+            <p>Built with 💎 Liquid Glass Design | Powered by MetaMask & Ethereum</p>
+        </footer>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="eatSound" preload="auto"></audio>
+    <audio id="gameOverSound" preload="auto"></audio>
+    <audio id="levelUpSound" preload="auto"></audio>
+
+    <script src="wallet.js"></script>
+    <script src="game.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
