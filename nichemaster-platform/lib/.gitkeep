@@ -1,0 +1,9 @@
+# Library directory
+# API integrations and utilities will be placed here
+# - YouTube Data API
+# - Google Trends API (SerpAPI)
+# - OpenAI SDK
+# - Anthropic SDK
+# - HeyGen API
+# - Pictory API
+# - ElevenLabs API

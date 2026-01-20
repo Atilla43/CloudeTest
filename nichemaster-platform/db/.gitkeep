@@ -1,0 +1,5 @@
+# Database directory
+# Prisma schema and database utilities will be placed here
+# - schema.prisma
+# - seed scripts
+# - migrations

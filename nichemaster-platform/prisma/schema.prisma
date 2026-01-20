@@ -1,0 +1,214 @@
+// Prisma Schema for NicheMaster Pro Platform
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  niches        Niche[]
+  videos        Video[]
+  contentIdeas  ContentIdea[]
+
+  @@map("users")
+}
+
+// Module 1: Niche Analysis
+model Niche {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  category        String
+  status          NicheStatus @default(DISCOVERED)
+
+  // Metrics
+  score           Float    @default(0)
+  searchVolume    Int      @default(0)
+  trendGrowth     Float    @default(0)
+  competition     CompetitionLevel @default(MEDIUM)
+  monetizationPotential Float @default(0)
+
+  // Revenue estimates
+  estimatedRevenueMin Int?
+  estimatedRevenueMax Int?
+
+  // Metadata
+  keywords        String[]
+  hashtags        String[]
+  topChannels     Json?    // Array of competitor channels
+  trendData       Json?    // Time series data
+
+  // Timestamps
+  discoveredAt    DateTime @default(now())
+  lastAnalyzedAt  DateTime @updatedAt
+
+  // Relations
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentIdeas    ContentIdea[]
+  videos          Video[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([score])
+  @@map("niches")
+}
+
+// Module 2: Content Ideas
+model ContentIdea {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  format          ContentFormat @default(SHORT)
+  status          ContentIdeaStatus @default(DRAFT)
+
+  // Script/Scenario
+  script          String?  // AI-generated script
+  scriptApproved  Boolean  @default(false)
+
+  // Scheduling
+  scheduledFor    DateTime?
+  publishedAt     DateTime?
+
+  // Settings
+  voiceId         String?  // ElevenLabs voice ID
+  avatarId        String?  // HeyGen avatar ID
+  style           String?  // Educational, Entertaining, etc.
+
+  // Metadata
+  keywords        String[]
+  hashtags        String[]
+  estimatedViews  Int?
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nicheId         String
+  niche           Niche    @relation(fields: [nicheId], references: [id], onDelete: Cascade)
+  video           Video?
+
+  @@index([userId])
+  @@index([nicheId])
+  @@index([status])
+  @@map("content_ideas")
+}
+
+// Module 2: Video Production & Analytics
+model Video {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  format          ContentFormat @default(SHORT)
+  status          VideoStatus @default(PROCESSING)
+
+  // File info
+  fileUrl         String?  // S3/R2 URL
+  thumbnailUrl    String?
+  duration        Int?     // in seconds
+  fileSize        Int?     // in bytes
+
+  // Publishing
+  publishedOn     Platform[]
+  youtubeId       String?
+  tiktokId        String?
+  instagramId     String?
+
+  publishedAt     DateTime?
+
+  // Analytics
+  views           Int      @default(0)
+  likes           Int      @default(0)
+  comments        Int      @default(0)
+  shares          Int      @default(0)
+  watchTime       Int      @default(0) // in seconds
+  ctr             Float    @default(0) // Click-through rate
+  revenue         Float    @default(0) // in USD
+  cpm             Float    @default(0) // Cost per mille
+
+  // Metadata
+  keywords        String[]
+  hashtags        String[]
+  lastSyncedAt    DateTime?
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nicheId         String
+  niche           Niche    @relation(fields: [nicheId], references: [id], onDelete: Cascade)
+  contentIdeaId   String   @unique
+  contentIdea     ContentIdea @relation(fields: [contentIdeaId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([nicheId])
+  @@index([status])
+  @@index([publishedAt])
+  @@map("videos")
+}
+
+// Enums
+enum NicheStatus {
+  DISCOVERED
+  ANALYZING
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum CompetitionLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ContentFormat {
+  SHORT       // 30-60 sec (Shorts/Reels/TikTok)
+  MEDIUM      // 10-15 min (YouTube)
+  LONG        // 15+ min
+}
+
+enum ContentIdeaStatus {
+  DRAFT
+  SCRIPT_GENERATED
+  APPROVED
+  IN_PRODUCTION
+  COMPLETED
+  PUBLISHED
+  REJECTED
+}
+
+enum VideoStatus {
+  PROCESSING
+  RENDERING
+  READY
+  PUBLISHED
+  FAILED
+}
+
+enum Platform {
+  YOUTUBE
+  TIKTOK
+  INSTAGRAM
+  FACEBOOK
+}
