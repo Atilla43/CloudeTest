@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -9,6 +11,21 @@ export default function Home() {
           <p className="text-xl text-gray-600 mb-8">
             AI-Powered Niche Research & Content Factory
           </p>
+
+          <div className="flex gap-4 justify-center mb-12">
+            <Link
+              href="/login"
+              className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            >
+              Get Started
+            </Link>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
             <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
@@ -26,10 +43,10 @@ export default function Home() {
 
           <div className="mt-12 p-6 bg-white/50 rounded-lg backdrop-blur-sm">
             <h3 className="text-lg font-semibold text-gray-700 mb-2">
-              🚀 Phase 1: MVP Setup Complete
+              ✅ Phase 1 Task 2: Authentication Complete
             </h3>
             <p className="text-sm text-gray-600">
-              Next.js 14 + TypeScript + Tailwind CSS + PostgreSQL + Redis
+              NextAuth.js + Login/Signup + Protected Routes
             </p>
           </div>
         </div>
